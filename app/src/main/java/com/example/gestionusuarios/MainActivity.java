@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     Context context;
     ArrayList<Usuario> usuarios;
+    UsuariosAdapter usuariosAdapter;
 
 
     @Override
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Inicializar usuarios
         usuarios = new ArrayList<>();
+        usuariosAdapter = new UsuariosAdapter(context, R.layout.usuario, usuarios);
+        listView.setAdapter(usuariosAdapter);
 
         // Lanzar la tarea de recuperación de usuarios
         tareaGetUsers = new GetUsersTask();
@@ -108,12 +111,17 @@ public class MainActivity extends AppCompatActivity {
                     user.setEmail(objeto.getString(Usuario.TAG_EMAIL));
                     user.setIsActive(objeto.getBoolean(Usuario.TAG_IS_ACTIVE));
                     user.setIsAdmin(objeto.getBoolean(Usuario.TAG_IS_ADMIN));
-                    Grupo grupo = new Grupo();
-                    JSONObject group = objeto.getJSONObject(Usuario.TAG_GROUP);
-                    grupo.setId(group.getInt(Usuario.TAG_GROUP_ID));
-                    grupo.setGroupname(group.getString(Usuario.TAG_GROUPNAME));
-                    grupo.setDescription(group.getString(Usuario.TAG_GROUPDESC));
-                    user.setGroup(grupo);
+
+                    // Si hay grupo -> se asigna al usuario
+                    if (!objeto.isNull(Usuario.TAG_GROUP)) {
+                        Grupo group = new Grupo();
+                        JSONObject grupo = objeto.getJSONObject(Usuario.TAG_GROUP);
+                        group.setId(grupo.getInt(Usuario.TAG_GROUP_ID));
+                        group.setGroupname(grupo.getString(Usuario.TAG_GROUPNAME));
+                        group.setDescription(grupo.getString(Usuario.TAG_GROUPDESC));
+                        user.setGroup(group);
+                    }
+
                     usuarios.add(user);
                 }
 
@@ -126,8 +134,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            usuariosAdapter.clear();
+
+            // mostrar indicador de progreso indeterminado
+            // -> progress bar features are not supported on Material action bars
+            // setProgressBarIndeterminateVisibility(true);
+        }
+
+        @Override
         protected void onPostExecute(final Boolean success) {
             // showProgress(false);
+
+            for (Usuario u : usuarios) {
+                usuariosAdapter.add(u);
+            }
+            usuariosAdapter.notifyDataSetChanged();
         }
 
         @Override
