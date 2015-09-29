@@ -3,4 +3,5 @@
 
     <string name="action_settings">Ajustes</string>
     <string name="msgHeader">Listado de Usuarios</string>
+    <string name="getUsersURL">http://tdw00.calamar.etsisi.upm.es:80/TDW_UserApi/v1/user</string>
 </resources>
