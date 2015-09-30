@@ -2,9 +2,13 @@ package com.example.gestionusuarios;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 
-public class Grupo  {
+import java.io.Serializable;
+
+public class Grupo implements Serializable {
 
     public static final String TAG_GROUP_ID  = "id";
     public static final String TAG_GROUPNAME = "groupname";
@@ -33,6 +37,11 @@ public class Grupo  {
         } catch (Exception e) {
             Log.e("JSon:", "Error en la creación del Grupo");
         }
+//        Gson gson = new GsonBuilder().create();
+//        Grupo g = gson.fromJson(objetoJSON.toString(), Grupo.class);
+//        this.setId(g.getId());
+//        this.setGroupname(g.getGroupname());
+//        this.setDescription(g.getDescription());
     }
 
     public int getId() {
@@ -61,10 +70,7 @@ public class Grupo  {
 
     @Override
     public String toString() {
-        return "Grupo {" +
-                "id=" + id +
-                ", groupname='" + groupname + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        final Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

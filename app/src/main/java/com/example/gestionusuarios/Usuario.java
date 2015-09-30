@@ -2,9 +2,13 @@ package com.example.gestionusuarios;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
 
     /**
      * Identificadores de los campos
@@ -31,7 +35,7 @@ public class Usuario {
     private Fecha createTime;
     private boolean isActive;
     private boolean isAdmin;
-    private Grupo group;
+    private Grupo group_id;
 
     /**
      * Constructor
@@ -53,14 +57,19 @@ public class Usuario {
             this.setIsAdmin(objetoJSON.getBoolean(TAG_IS_ADMIN));
 
             // Si hay grupo -> se asigna al usuario
-            if (!objetoJSON.isNull(TAG_GROUP)) {
-                this.setGroup(new Grupo(objetoJSON.getJSONObject(TAG_GROUP)));
-            }
+            this.setGroupId(
+                    objetoJSON.isNull(TAG_GROUP)
+                            ? null
+                            : new Grupo(objetoJSON.getJSONObject(TAG_GROUP))
+            );
 
             // Si hay fecha de creación -> se asigna
-            if (!objetoJSON.isNull(TAG_CTIME)) {
-                this.setCreateTime(new Fecha(objetoJSON.getJSONObject(TAG_CTIME)));
-            }
+            this.setCreateTime(
+                    objetoJSON.isNull(TAG_CTIME)
+                            ? null
+                            : new Fecha(objetoJSON.getJSONObject(TAG_CTIME))
+            );
+
         } catch (Exception e) {
             Log.e("JSon:", "Error en la creación del Usuario");
         }
@@ -122,28 +131,21 @@ public class Usuario {
         this.isAdmin = isAdmin;
     }
 
-    public Grupo getGroup() {
-        return group;
+    public Grupo getGroupId() {
+        return group_id;
     }
 
-    public void setGroup(Grupo group) {
-        this.group = group;
+    public void setGroupId(Grupo groupId) {
+        this.group_id = groupId;
     }
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", isActive=" + isActive +
-                ", isAdmin=" + isAdmin +
-                ", groupId=" + group +
-                '}';
+        final Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
-    public class Fecha {
+    public class Fecha implements Serializable {
         private String date;
         private int timezone_type;
         private String timezone;
@@ -189,11 +191,8 @@ public class Usuario {
 
         @Override
         public String toString() {
-            return "Fecha{" +
-                    "date='" + date + '\'' +
-                    ", timezone_type=" + timezone_type +
-                    ", timezone='" + timezone + '\'' +
-                    '}';
+            final Gson gson = new Gson();
+            return gson.toJson(this);
         }
     }
 }

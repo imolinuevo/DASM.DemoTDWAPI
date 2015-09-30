@@ -108,9 +108,10 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < respuestaJSON.length(); i++) {
                     try {
                         Usuario usuario = new Usuario(respuestaJSON.getJSONObject(i));
+                        Log.i("Usuario", usuario.toString());
                         usuarios.add(usuario);
                     } catch (Exception e) {
-                        Log.e("Error: ", "JSON incorrecto: " + e.getMessage());
+                        Log.e("Error", "JSON incorrecto: " + e.getMessage());
                     }
                 }
 
