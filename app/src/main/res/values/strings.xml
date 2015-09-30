@@ -6,4 +6,6 @@
     <string name="getUsersURL">http://tdw00.calamar.etsisi.upm.es:80/TDW_UserApi/v1/user</string>
     <string name="msgWait">Espere…</string>
     <string name="msgLoadingUsers">"Cargando usuarios "</string>
+    <string name="title_activity_mostrar_usuario">Mostrar Usuario</string>
+
 </resources>

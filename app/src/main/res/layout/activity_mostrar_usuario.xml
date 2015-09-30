@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.gestionusuarios.MostrarUsuarioActivity">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserId" />
+            <TextView android:id="@+id/tvUserId" />
+        </TableRow>
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserName" />
+            <TextView android:id="@+id/tvUserName" />
+        </TableRow>
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserEmail" />
+            <TextView android:id="@+id/tvUserEmail" />
+        </TableRow>
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserCreationDate" />
+            <TextView android:id="@+id/tvUserCTime" />
+        </TableRow>
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserIsActive" />
+            <ToggleButton
+                android:id="@+id/tbUserIsActive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserIsAdmin" />
+            <ToggleButton
+                android:id="@+id/tbUserIsAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TextView android:text="@string/labelUserGroup" />
+            <TextView android:id="@+id/tvUserGroup" />
+        </TableRow>
+
+    </TableLayout>
+
+
+</RelativeLayout>

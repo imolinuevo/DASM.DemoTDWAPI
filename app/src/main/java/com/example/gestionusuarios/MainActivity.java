@@ -3,12 +3,15 @@ package com.example.gestionusuarios;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -45,9 +48,19 @@ public class MainActivity extends AppCompatActivity {
         usuariosAdapter = new UsuariosAdapter(context, R.layout.usuario, usuarios);
         listView.setAdapter(usuariosAdapter);
 
-        // Lanzar la tarea de recuperación de usuarios
+        // Lanzar la tarea de recuperación y visualización de usuarios
         tareaGetUsers = new GetUsersTask();
         tareaGetUsers.execute((Void) null);
+
+        // Si se pulsa sobre un ítem -> lanzamos otra actividad para visualizarlo
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent mostrarUsuario = new Intent(MainActivity.this, MostrarUsuarioActivity.class);
+                mostrarUsuario.putExtra("usuario", usuarios.get(position));
+                startActivity(mostrarUsuario);
+            }
+        });
     }
 
     @Override
@@ -78,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
         return new Scanner(inStream).useDelimiter("\\A").next();
     }
 
+    /**
+     * Recupera y muestra los usuarios
+     */
     public class GetUsersTask extends AsyncTask<Void, Void, Boolean> {
 
         private int codRespuesta = HttpURLConnection.HTTP_BAD_REQUEST;

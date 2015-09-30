@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="labelUserId">Id</string>
+    <string name="labelUserName">Nombre de usuario</string>
+    <string name="labelUserEmail">Correo electrónico</string>
+    <string name="labelUserCreationDate">Fecha creación</string>
+    <string name="labelUserIsActive">¿Activo?</string>
+    <string name="labelUserIsAdmin">¿Admin?</string>
+    <string name="labelUserGroup">Grupo</string>
+</resources>
