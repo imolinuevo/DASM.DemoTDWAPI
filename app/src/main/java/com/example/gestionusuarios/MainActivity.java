@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -20,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
-
-    private GetUsersTask tareaGetUsers = null;
 
     ListView listView;
     Context context;
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(usuariosAdapter);
 
         // Lanzar la tarea de recuperación de usuarios
-        tareaGetUsers = new GetUsersTask();
+        GetUsersTask tareaGetUsers = new GetUsersTask();
         tareaGetUsers.execute((Void) null);
     }
 
@@ -102,27 +99,14 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray respuestaJSON = new JSONArray(jsonStr);
                 Log.d("Nº elementos: ", String.valueOf(respuestaJSON.length()));
 
-                // parseamos JSON para obtener Usuarios
+                // TO DO generamos los usuarios a partir del objeto JSON
                 for (int i = 0; i < respuestaJSON.length(); i++) {
-                    JSONObject objeto = respuestaJSON.getJSONObject(i);
-                    Usuario user = new Usuario();
-                    user.setId(objeto.getInt(Usuario.TAG_ID));
-                    user.setUsername(objeto.getString(Usuario.TAG_USERNAME));
-                    user.setEmail(objeto.getString(Usuario.TAG_EMAIL));
-                    user.setIsActive(objeto.getBoolean(Usuario.TAG_IS_ACTIVE));
-                    user.setIsAdmin(objeto.getBoolean(Usuario.TAG_IS_ADMIN));
-
-                    // Si hay grupo -> se asigna al usuario
-                    if (!objeto.isNull(Usuario.TAG_GROUP)) {
-                        Grupo group = new Grupo();
-                        JSONObject grupo = objeto.getJSONObject(Usuario.TAG_GROUP);
-                        group.setId(grupo.getInt(Usuario.TAG_GROUP_ID));
-                        group.setGroupname(grupo.getString(Usuario.TAG_GROUPNAME));
-                        group.setDescription(grupo.getString(Usuario.TAG_GROUPDESC));
-                        user.setGroup(group);
+                    try {
+                        Usuario usuario = new Usuario(respuestaJSON.getJSONObject(i));
+                        usuarios.add(usuario);
+                    } catch (Exception e) {
+                        Log.e("Error: ", "JSON incorrecto: " + e.getMessage());
                     }
-
-                    usuarios.add(user);
                 }
 
             } catch (Exception e) {

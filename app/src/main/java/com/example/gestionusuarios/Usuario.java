@@ -1,20 +1,25 @@
 package com.example.gestionusuarios;
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 public class Usuario {
 
     /**
      * Identificadores de los campos
      */
-    public static final String TAG_ID        = "id";
-    public static final String TAG_USERNAME  = "username";
-    public static final String TAG_PASSWORD  = "password";
-    public static final String TAG_EMAIL     = "email";
-    public static final String TAG_IS_ACTIVE = "isActive";
-    public static final String TAG_IS_ADMIN  = "isAdmin";
-    public static final String TAG_GROUP     = "group_id";
-    public static final String TAG_GROUP_ID  = "id";
-    public static final String TAG_GROUPNAME = "groupname";
-    public static final String TAG_GROUPDESC = "description";
+    public static final String TAG_ID         = "id";
+    public static final String TAG_USERNAME   = "username";
+    public static final String TAG_PASSWORD   = "password";
+    public static final String TAG_EMAIL      = "email";
+    public static final String TAG_CTIME      = "createTime";
+    public static final String TAG_CTIME_DATE = "date";
+    public static final String TAG_CTIME_TZT  = "timezone_type";
+    public static final String TAG_CTIME_TZ   = "timezone";
+    public static final String TAG_IS_ACTIVE  = "isActive";
+    public static final String TAG_IS_ADMIN   = "isAdmin";
+    public static final String TAG_GROUP      = "group_id";
 
     /**
      * Atributos privados
@@ -23,7 +28,7 @@ public class Usuario {
     private String username;
     private String email;
     private String password;
-    private String createTime;
+    private Fecha createTime;
     private boolean isActive;
     private boolean isAdmin;
     private Grupo group;
@@ -32,6 +37,33 @@ public class Usuario {
      * Constructor
      */
     public Usuario() {
+    }
+
+    /**
+     * TO DO Constructor: genera un nuevo usuario a partir de su representación
+     * como objeto JSON
+     * @param objetoJSON    Representación del objeto JSON
+     */
+    public Usuario(JSONObject objetoJSON) {
+        try {
+            this.setId(objetoJSON.getInt(TAG_ID));
+            this.setUsername(objetoJSON.getString(TAG_USERNAME));
+            this.setEmail(objetoJSON.getString(TAG_EMAIL));
+            this.setIsActive(objetoJSON.getBoolean(TAG_IS_ACTIVE));
+            this.setIsAdmin(objetoJSON.getBoolean(TAG_IS_ADMIN));
+
+            // Si hay grupo -> se asigna al usuario
+            if (!objetoJSON.isNull(TAG_GROUP)) {
+                this.setGroup(new Grupo(objetoJSON.getJSONObject(TAG_GROUP)));
+            }
+
+            // Si hay fecha de creación -> se asigna
+            if (!objetoJSON.isNull(TAG_CTIME)) {
+                this.setCreateTime(new Fecha(objetoJSON.getJSONObject(TAG_CTIME)));
+            }
+        } catch (Exception e) {
+            Log.e("JSon:", "Error en la creación del Usuario");
+        }
     }
 
     public String getUsername() {
@@ -66,11 +98,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getCreateTime() {
+    public Fecha getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Fecha createTime) {
         this.createTime = createTime;
     }
 
@@ -109,5 +141,59 @@ public class Usuario {
                 ", isAdmin=" + isAdmin +
                 ", groupId=" + group +
                 '}';
+    }
+
+    public class Fecha {
+        private String date;
+        private int timezone_type;
+        private String timezone;
+
+        /**
+         * TO DO Constructor: genera un nuevo grupo a partir de su representación
+         * como objeto JSON
+         * @param objetoJSON    Representación del objeto JSON
+         */
+        public Fecha(JSONObject objetoJSON) {
+            try {
+                this.setDate(objetoJSON.getString(TAG_CTIME_DATE));
+                this.setTimezoneType(objetoJSON.getInt(TAG_CTIME_TZT));
+                this.setTimezone(objetoJSON.getString(TAG_CTIME_TZ));
+            } catch (Exception e) {
+                Log.e("JSon:", "Error en la creación de la fecha de creación");
+            }
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public int getTimezoneType() {
+            return timezone_type;
+        }
+
+        public void setTimezoneType(int timezone_type) {
+            this.timezone_type = timezone_type;
+        }
+
+        public String getTimezone() {
+            return timezone;
+        }
+
+        public void setTimezone(String timezone) {
+            this.timezone = timezone;
+        }
+
+        @Override
+        public String toString() {
+            return "Fecha{" +
+                    "date='" + date + '\'' +
+                    ", timezone_type=" + timezone_type +
+                    ", timezone='" + timezone + '\'' +
+                    '}';
+        }
     }
 }
