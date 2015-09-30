@@ -1,6 +1,8 @@
 package com.example.gestionusuarios;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     ArrayList<Usuario> usuarios;
     UsuariosAdapter usuariosAdapter;
-
+    ProgressDialog progressDialog;
+    GetUsersTask tareaGetUsers = null;
+    MainActivity main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // Identificar recursos
         listView = (ListView) findViewById(R.id.listView);
         context = this.getApplicationContext();
+        main = this;
 
         // Inicializar usuarios
         usuarios = new ArrayList<>();
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(usuariosAdapter);
 
         // Lanzar la tarea de recuperación de usuarios
-        GetUsersTask tareaGetUsers = new GetUsersTask();
+        tareaGetUsers = new GetUsersTask();
         tareaGetUsers.execute((Void) null);
     }
 
@@ -122,9 +127,14 @@ public class MainActivity extends AppCompatActivity {
             super.onPreExecute();
             usuariosAdapter.clear();
 
-            // mostrar indicador de progreso indeterminado
-            // -> progress bar features are not supported on Material action bars
-            // setProgressBarIndeterminateVisibility(true);
+            progressDialog = ProgressDialog.show(main, getString(R.string.msgWait), getString(R.string.msgLoadingUsers), true, true);
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    tareaGetUsers.cancel(true);
+                }
+            });
         }
 
         @Override
@@ -135,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 usuariosAdapter.add(u);
             }
             usuariosAdapter.notifyDataSetChanged();
+            progressDialog.dismiss();
         }
 
         @Override
