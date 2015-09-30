@@ -114,17 +114,17 @@ public class MainActivity extends AppCompatActivity {
                 // recuperamos los usuarios
                 InputStream in = new BufferedInputStream(conexion.getInputStream());
                 codRespuesta = conexion.getResponseCode();
-                Log.d("Info", "POST Response Code: " + String.valueOf(codRespuesta));
+                // Log.d("Info", "POST Response Code: " + String.valueOf(codRespuesta));
                 String jsonStr = getResponseText(in);
-                Log.d("Response: ", jsonStr);
+                // Log.d("Response: ", jsonStr);
                 JSONArray respuestaJSON = new JSONArray(jsonStr);
-                Log.d("Nº elementos: ", String.valueOf(respuestaJSON.length()));
+                // Log.d("Nº elementos: ", String.valueOf(respuestaJSON.length()));
 
                 // TO DO generamos los usuarios a partir del objeto JSON
                 for (int i = 0; i < respuestaJSON.length(); i++) {
                     try {
                         Usuario usuario = new Usuario(respuestaJSON.getJSONObject(i));
-                        Log.i("Usuario", usuario.toString());
+                        // Log.i("Usuario", usuario.toString());
                         usuarios.add(usuario);
                     } catch (Exception e) {
                         Log.e("Error", "JSON incorrecto: " + e.getMessage());
