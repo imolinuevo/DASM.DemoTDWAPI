@@ -4,4 +4,5 @@
 /app/build
 /build
 /captures
+/.navigation
 *.iml
