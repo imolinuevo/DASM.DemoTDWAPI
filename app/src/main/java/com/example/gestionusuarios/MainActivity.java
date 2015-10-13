@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Recupera y muestra los usuarios
+     * OPCIONAL: En vez de hacerlo con AsyncTask + HttpURLConnection, emplear RETROFIT
      */
     public class GetUsersTask extends AsyncTask<Void, Void, Boolean> {
 
